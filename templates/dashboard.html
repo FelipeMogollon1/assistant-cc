@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - AsistenteCC</title>
+    <link rel="stylesheet" href="../static/dashboard.css">
+</head>
+<body>
+    <div class="header">
+        <h1>📊 Dashboard - AsistenteCC</h1>
+        <p>Panel de control para funcionarios de la Cámara de Comercio</p>
+        <div class="nav-links">
+            <a href="/">← Volver al Chatbot</a>
+            <a href="#" onclick="location.reload()">🔄 Actualizar</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Estadísticas -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Total de Tickets</h3>
+                <div class="number">{{ total_tickets }}</div>
+            </div>
+
+            <div class="stat-card warning">
+                <h3>Tickets Pendientes</h3>
+                <div class="number">{{ tickets_pendientes }}</div>
+            </div>
+
+            <div class="stat-card success">
+                <h3>Tickets Hoy</h3>
+                <div class="number">{{ tickets_hoy }}</div>
+            </div>
+
+            <div class="stat-card info">
+                <h3>Conversaciones Hoy</h3>
+                <div class="number">{{ conversaciones }}</div>
+            </div>
+        </div>
+
+        <!-- Tickets Recientes -->
+        <div class="content-section">
+            <div class="section-header">
+                <h2>Tickets Recientes</h2>
+                <button class="btn btn-primary" onclick="location.reload()">🔄 Actualizar</button>
+            </div>
+
+            {% if tickets %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Asunto</th>
+                        <th>Categoría</th>
+                        <th>Prioridad</th>
+                        <th>Estado</th>
+                        <th>Fecha</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ticket in tickets %}
+                    <tr>
+                        <td><strong>#{{ ticket.id }}</strong></td>
+                        <td>{{ ticket.nombre }}</td>
+                        <td>{{ ticket.asunto }}</td>
+                        <td>{{ ticket.categoria }}</td>
+                        <td>
+                            <span class="badge badge-{{ ticket.prioridad }}">
+                                {{ ticket.prioridad }}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="badge badge-{{ ticket.estado }}">
+                                {{ ticket.estado }}
+                            </span>
+                        </td>
+                        <td>{{ ticket.created_at[:10] }}</td>
+                        <td>
+                            <div class="actions">
+                                <button class="action-btn resolve" onclick="resolverTicket({{ ticket.id }})">
+                                    ✓ Resolver
+                                </button>
+                                <button class="action-btn" onclick="verDetalle({{ ticket.id }})">
+                                    👁️ Ver
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <div class="empty-state">
+                <p>📭 No hay tickets registrados todavía</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Información del Sistema -->
+        <div class="content-section">
+            <h2>ℹ️ Información del Sistema</h2>
+            <p style="color: #666; margin-top: 10px;">
+                Este dashboard muestra los tickets creados a través del chatbot. 
+                Los tickets se clasifican automáticamente por categoría y prioridad 
+                utilizando inteligencia artificial.
+            </p>
+            <div style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px;">
+                <strong>Categorías:</strong> renovacion, registro, certificados, consulta, general<br>
+                <strong>Prioridades:</strong> urgente, alta, normal
+            </div>
+        </div>
+    </div>
+
+    <script src="../static/dashboard.js"></script>
+
+</body>
+</html>

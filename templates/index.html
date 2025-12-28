@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AsistenteCC - Cámara de Comercio de Pereira</title>
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+    <div class="container">
+
+        <div class="info-section">
+            <div class="logo">Asistente<span>CC</span></div>
+            <h1>Chatbot Inteligente para la Cámara de Comercio de Pereira</h1>
+            <p class="descripcion">
+                Bienvenido al asistente virtual de la Cámara de Comercio de Pereira por Risaralda. 
+                Estoy aquí para ayudarte con información sobre trámites, servicios y responder 
+                tus preguntas las 24 horas del día.
+            </p>
+
+            <div class="feature">
+                <h3>🔄 Renovación de Matrícula</h3>
+                <p>Información sobre plazos, costos y procedimientos para renovar tu matrícula mercantil.</p>
+            </div>
+
+            <div class="feature">
+                <h3>📋 Registro de Empresas</h3>
+                <p>Guía paso a paso para registrar tu nueva empresa o establecimiento de comercio.</p>
+            </div>
+
+            <div class="feature">
+                <h3>📄 Certificados</h3>
+                <p>Solicita certificados de existencia, representación legal y más.</p>
+            </div>
+
+            <div class="feature">
+                <h3>💬 Consultas Generales</h3>
+                <p>Cualquier duda sobre nuestros servicios, horarios y sedes.</p>
+            </div>
+
+            <div class="feature">
+                <h3>🎫 Soporte Personalizado</h3>
+                <p>Si necesitas ayuda específica, puedo crear un ticket para que un funcionario te contacte.</p>
+            </div>
+        </div>
+
+        <!-- Chatbot -->
+        <div class="chat-container">
+            <div class="chat-header">
+                <h2>💬 Asistente Virtual</h2>
+                <p>Powered by IA • Cámara de Comercio de Pereira</p>
+            </div>
+
+            <div class="quick-actions">
+                <button class="quick-btn" onclick="sendQuickMessage('¿Cómo renuevo mi matrícula mercantil?')">🔄 Renovar Matrícula</button>
+                <button class="quick-btn" onclick="sendQuickMessage('¿Cuánto cuesta un certificado?')">📄 Certificados</button>
+                <button class="quick-btn" onclick="sendQuickMessage('¿Cómo registro una empresa?')">📋 Registro</button>
+            </div>
+
+            <div class="chat-messages" id="chatMessages">
+                <div class="message bot">
+                    <div class="message-content">
+                        ¡Hola! 👋 Soy el asistente virtual de la Cámara de Comercio de Pereira. 
+                        ¿En qué puedo ayudarte hoy?
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-input-container">
+                <div class="chat-input-wrapper">
+                    <input 
+                        type="text" 
+                        class="chat-input" 
+                        id="chatInput" 
+                        placeholder="Escribe tu consulta aquí..."
+                        onkeypress="handleKeyPress(event)"
+                    >
+                    <button class="send-btn" id="sendBtn" onclick="sendMessage()">Enviar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Tickets -->
+    <div class="modal" id="ticketModal">
+        <div class="modal-content">
+            <h2>Crear Ticket de Soporte</h2>
+            <p style="color: #666; margin-bottom: 20px;">
+                Completa este formulario y un funcionario te contactará pronto.
+            </p>
+
+            <form id="ticketForm">
+                <div class="form-group">
+                    <label>Nombre Completo *</label>
+                    <input type="text" id="ticketNombre" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Email *</label>
+                    <input type="email" id="ticketEmail" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Teléfono</label>
+                    <input type="tel" id="ticketTelefono">
+                </div>
+
+                <div class="form-group">
+                    <label>Asunto *</label>
+                    <input type="text" id="ticketAsunto" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Descripción *</label>
+                    <textarea id="ticketDescripcion" required></textarea>
+                </div>
+
+                <div class="form-buttons">
+                    <button type="button" class="btn btn-secondary" onclick="closeTicketModal()">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Crear Ticket</button>
+                </div>
+
+                <div class="success-message" id="successMessage"></div>
+            </form>
+        </div>
+    </div>
+    <script src="../static/chat.js"></script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+{
+  "name": "Notificación de Tickets CCP",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "ticket-created",
+        "responseMode": "responseNode"
+      },
+      "id": "webhook-ticket",
+      "name": "Webhook - Ticket Creado",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1.1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json.body.prioridad}}",
+              "operation": "equals",
+              "value2": "urgente"
+            }
+          ]
+        }
+      },
+      "id": "if-urgente",
+      "name": "¿Es Urgente?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "functionCode": "return [\n  {\n    json: {\n      message: `🚨 TICKET URGENTE #${$input.item.json.body.ticket_id}`,\n      nombre: $input.item.json.body.nombre,\n      email: $input.item.json.body.email,\n      asunto: $input.item.json.body.asunto,\n      categoria: $input.item.json.body.categoria\n    }\n  }\n];"
+      },
+      "id": "format-urgente",
+      "name": "Formatear Urgente",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [680, 200]
+    },
+    {
+      "parameters": {
+        "functionCode": "return [\n  {\n    json: {\n      message: `📋 Nuevo Ticket #${$input.item.json.body.ticket_id}`,\n      nombre: $input.item.json.body.nombre,\n      email: $input.item.json.body.email,\n      asunto: $input.item.json.body.asunto,\n      categoria: $input.item.json.body.categoria\n    }\n  }\n];"
+      },
+      "id": "format-normal",
+      "name": "Formatear Normal",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [680, 400]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"success\": true, \"notificacion_enviada\": true } }}"
+      },
+      "id": "respond",
+      "name": "Responder",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [900, 300]
+    }
+  ],
+  "connections": {
+    "Webhook - Ticket Creado": {
+      "main": [
+        [
+          {
+            "node": "¿Es Urgente?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Es Urgente?": {
+      "main": [
+        [
+          {
+            "node": "Formatear Urgente",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Formatear Normal",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Formatear Urgente": {
+      "main": [
+        [
+          {
+            "node": "Responder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Formatear Normal": {
+      "main": [
+        [
+          {
+            "node": "Responder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {}
+}
